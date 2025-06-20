@@ -78,5 +78,52 @@ public class ComplaintServlet extends HttpServlet {
             throw new RuntimeException(e.getMessage());
         }
     }
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
+        ServletContext servletContext = req.getServletContext();
+        BasicDataSource bds = (BasicDataSource) servletContext.getAttribute("dataSource");
+
+        ComplaintDAO complaintDAO = new ComplaintDAOImpl(bds);
+
+        UserDTO userDTO = (UserDTO) req.getSession().getAttribute("user");
+        UserDTO adminDTO = (UserDTO) req.getSession().getAttribute("admin");
+
+        String uid = null;
+        if (userDTO != null) {
+            uid = userDTO.getId();
+        } else if (adminDTO != null) {
+            uid = adminDTO.getId();
+        } else {
+            resp.sendRedirect("login.jsp");
+            return;
+        }
+        try{
+            List<ComplaintDTO> complaints = complaintDAO.getAllComplaint(uid);
+            req.setAttribute("complaints", complaints);
+            HttpSession session = req.getSession();
+            String status = (String) session.getAttribute("status");
+            if (status != null) {
+                req.setAttribute("status", status);
+                session.removeAttribute("status");
+            }
+            Cookie cookie = new Cookie("JSESSIONID", "");
+            cookie.setMaxAge(0);  // delete cookie
+            cookie.setPath("/");
+            resp.addCookie(cookie);
+//            resp.sendRedirect("UserDashboard.jsp");
+//            resp.sendRedirect("UserDashboard.jsp");
+
+            req.getRequestDispatcher("UserDashboard.jsp").forward(req, resp);
+
+            System.out.println("STATUS: " + status);
+            System.out.println("COMPLAINTS SIZE: " + complaints.size());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.sendRedirect("UserDashboard.jsp?status=error");
+        }
+    }
+
 
 }
