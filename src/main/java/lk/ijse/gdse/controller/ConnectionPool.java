@@ -25,6 +25,7 @@ public class ConnectionPool implements ServletContextListener {
         servletContext.setAttribute("dataSource", basicDataSource);
 
     }
+
     public void contextDestroyed(ServletContextEvent sce) {
         try{
             ServletContext servletContext = sce.getServletContext();
