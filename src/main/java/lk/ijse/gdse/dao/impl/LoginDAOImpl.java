@@ -1,7 +1,7 @@
 package lk.ijse.gdse.dao.impl;
 
 import lk.ijse.gdse.dao.LoginDAO;
-
+import lk.ijse.gdse.dto.UserDTO;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;
@@ -17,5 +17,29 @@ public class LoginDAOImpl implements LoginDAO {
         this.dataSource = dataSource;
     }
 
+    @Override
+    public UserDTO Login(String name, String password) {
+        try {
+            Connection conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement("select * from User where name=? and password=?");
+            ps.setString(1, name);
+            ps.setString(2, password);
 
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new UserDTO(
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("password"),
+                        rs.getString("role")
+                );
+            }
+            conn.close();
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
