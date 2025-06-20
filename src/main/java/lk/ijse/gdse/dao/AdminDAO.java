@@ -5,4 +5,5 @@ import lk.ijse.gdse.dto.ComplaintDTO;
 import java.util.List;
 
 public interface AdminDAO {
+
 }
