@@ -22,7 +22,7 @@
   <nav class="navbar">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
-        <img src="assests/cmsLogo.png" alt="Logo" width="50" height="44" class="d-inline-block align-text-top">
+        <img src="assests/lo go.png" alt="Logo" width="50" height="44" class="d-inline-block align-text-top">
         Complaint Management System
       </a>
       <div  class="d-flex align-item-center" style="gap: 10px">
